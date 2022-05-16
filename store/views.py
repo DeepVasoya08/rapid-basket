@@ -1,18 +1,29 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import JsonResponse
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib import messages
 import json
 import datetime
 
 from .models import *
 from .utils import cartCookie, cartData, guestCheckout
+from .form import CreateUserForm
+
+
+user = ""
+email = ""
 
 
 def store(request):
     data = cartData(request)
     cartItems = data["cartItems"]
+    order = data["order"]
+    items = data["items"]
 
     products = Product.objects.all()
-    context = {"products": products, "cartItems": cartItems, "shipping": False}
+    context = {"products": products, "cartItems": cartItems}
     return render(request, "store/store.html", context)
 
 
@@ -104,3 +115,58 @@ def processOrder(request):
         )
 
     return JsonResponse("Payment complete", safe=False)
+
+
+def signUp(request):
+    global user, email
+    form = CreateUserForm()
+
+    if request.method == "POST":
+        form = CreateUserForm(request.POST)
+        if form.is_valid():
+            form.save()
+
+            user = form.cleaned_data.get("username")
+            email = form.cleaned_data.get("email")
+            superuser = User.objects.filter(username=user)
+            # customer, created = Customer.objects.get_or_create(
+            #     user=User, name=user, email=email
+            # )
+            # customer.save()
+
+            messages.success(request, "Account created")
+            return redirect("signin")
+
+    context = {"form": form}
+
+    return render(request, "store/signup.html", context)
+
+
+def signIn(request):
+    global user, email
+
+    if request.method == "POST":
+        username = request.POST["username"]
+        password = request.POST["password"]
+
+        # user = form.cleaned_data.get("username")
+        # email = form.cleaned_data.get("email")
+
+        auth_user = authenticate(username=username, password=password)
+
+        if auth_user is not None:
+            login(request, auth_user)
+            customer, created = Customer.objects.get_or_create(
+                user=request.user, name=user, email=email
+            )
+            customer.save()
+            return redirect("store")
+        else:
+            messages.error(request, "invalid username/password")
+            return redirect("store")
+
+    return render(request, "store/signin.html")
+
+
+def signOut(request):
+    pass

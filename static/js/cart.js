@@ -5,11 +5,9 @@ for (let i = 0; i < updateBtn.length; i++) {
         const productId = this.dataset.product;
         const action = this.dataset.action;
 
-        console.log("productId: ", productId, " ", "action: ", action);
-        console.log("user", user);
-
         if (user == "AnonymousUser") {
             addCookieItem(productId, action);
+            console.log(user);
         } else {
             updateUserOrder(productId, action);
         }
