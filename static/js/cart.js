@@ -7,7 +7,7 @@ for (let i = 0; i < updateBtn.length; i++) {
 
         if (user == "AnonymousUser") {
             addCookieItem(productId, action);
-            console.log(user);
+            // console.log(user);
         } else {
             updateUserOrder(productId, action);
         }
@@ -18,7 +18,7 @@ const addCookieItem = (productId, action) => {
     if (action == "add") {
         if (cart[productId] == undefined) {
             cart[productId] = { "quantity": 1 };
-            console.log('added');
+            // console.log('added');
         } else {
             cart[productId]["quantity"] += 1;
         }
@@ -28,7 +28,7 @@ const addCookieItem = (productId, action) => {
         cart[productId]["quantity"] -= 1;
 
         if (cart[productId]['quantity'] <= 0) {
-            console.log('removed');
+            // console.log('removed');
             delete cart[productId];
         }
     }

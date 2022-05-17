@@ -6,6 +6,7 @@ from .models import *
 admin.site.site_title = "Rapid Basket"
 admin.site.site_header = "Rapid Basket 🛒"
 admin.site.register(Customer)
+admin.site.register(Category)
 admin.site.register(Product)
 admin.site.register(Order)
 admin.site.register(OrderItem)

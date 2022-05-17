@@ -22,8 +22,9 @@ def store(request):
     order = data["order"]
     items = data["items"]
 
-    products = Product.objects.all()
-    context = {"products": products, "cartItems": cartItems}
+    categories = Category.objects.all()
+
+    context = {"categories": categories, "cartItems": cartItems}
     return render(request, "store/store.html", context)
 
 

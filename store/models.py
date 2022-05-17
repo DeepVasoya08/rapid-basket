@@ -13,14 +13,28 @@ class Customer(models.Model):
         return self.name
 
 
+class Category(models.Model):
+    title = models.CharField(max_length=50)
+    slug = models.SlugField(unique=True, blank=True, null=True)
+
+    def __str__(self):
+        return self.title
+
+    @property
+    def get_products(self):
+        return Product.objects.filter(categories=self.title)
+
+
 class Product(models.Model):
-    name = models.CharField(max_length=200)
+    title = models.CharField(max_length=200)
+    desc = models.CharField(max_length=300)
     price = models.FloatField()
     digital = models.BooleanField(default=False, null=True, blank=True)
     image = models.ImageField(null=True, blank=True)
+    categories = models.ForeignKey(Category, blank=True, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.name
+        return self.title
 
     @property
     def imageURL(self):
