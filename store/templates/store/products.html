@@ -1,0 +1,31 @@
+{% extends 'store/main.html' %} {% load static %} {% block content %}
+<div class="row">
+  <div class="col-md-12">
+    <h1>{{categories.title}}</h1>
+    <hr />
+    <div class="row">
+      {% for item in products %}
+      <div class="col-md-3">
+        <div class="card">
+          <div class="card-body">
+            <div class="category-image">
+              <img class="w-100" src="{{item.imageURL}}" alt="category image" />
+            </div>
+            <h4 class="text-center">{{item.title}}</h4>
+          </div>
+          <p>{{item.desc}}</p>
+          <hr />
+          <button
+            data-product="{{item.id}}"
+            data-action="add"
+            class="btn btn-outline-secondary add-btn update-cart"
+          >
+            Add to Cart
+          </button>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock content %}

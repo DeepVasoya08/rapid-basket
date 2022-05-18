@@ -28,6 +28,23 @@ def store(request):
     return render(request, "store/store.html", context)
 
 
+def productsView(request, slug):
+    data = cartData(request)
+    cartItems = data["cartItems"]
+    if Category.objects.filter(slug=slug):
+        products = Product.objects.filter(categories__slug=slug)
+        category_name = Category.objects.filter(slug=slug).first()
+        context = {
+            "categories": category_name,
+            "products": products,
+            "cartItems": cartItems,
+        }
+        return render(request, "store/products.html", context)
+
+    messages.warning(request, "No such category found!")
+    return redirect("store")
+
+
 def cart(request):
     data = cartData(request)
     cartItems = data["cartItems"]

@@ -16,9 +16,18 @@ class Customer(models.Model):
 class Category(models.Model):
     title = models.CharField(max_length=50)
     slug = models.SlugField(unique=True, blank=True, null=True)
+    image = models.ImageField(null=True, blank=True)
 
     def __str__(self):
         return self.title
+
+    @property
+    def imageURL(self):
+        try:
+            url = self.image.url
+        except:
+            url = ""
+        return url
 
     @property
     def get_products(self):
@@ -30,8 +39,9 @@ class Product(models.Model):
     desc = models.CharField(max_length=300)
     price = models.FloatField()
     digital = models.BooleanField(default=False, null=True, blank=True)
-    image = models.ImageField(null=True, blank=True)
+    pro_image = models.ImageField(null=True, blank=True)
     categories = models.ForeignKey(Category, blank=True, on_delete=models.CASCADE)
+    slug = models.SlugField(unique=True, blank=True, null=True)
 
     def __str__(self):
         return self.title
@@ -39,7 +49,7 @@ class Product(models.Model):
     @property
     def imageURL(self):
         try:
-            url = self.image.url
+            url = self.pro_image.url
         except:
             url = ""
         return url
