@@ -45,6 +45,22 @@ def productsView(request, slug):
     return redirect("store")
 
 
+def productDetails(request, cat_slug, pro_slug):
+    data = cartData(request)
+    cartItems = data["cartItems"]
+    if Category.objects.filter(slug=cat_slug):
+        if Product.objects.filter(slug=pro_slug):
+            product = Product.objects.filter(slug=pro_slug).first()
+            context = {"product": product, "cartItems": cartItems}
+        else:
+            messages.error(request, "No such product found!")
+            return redirect("collections")
+    else:
+        messages.error(request, "No such category found!")
+        return redirect("collections")
+    return render(request, "store/product_details.html", context)
+
+
 def cart(request):
     data = cartData(request)
     cartItems = data["cartItems"]
