@@ -55,6 +55,17 @@ a{
     font-size: 14px;
 }
 
+#wishlist-total {
+    display: block;
+    text-align: center;
+    color: #fff;
+    background-color: red;
+    width: 20px;
+    height: 25px;
+    border-radius: 50%;
+    font-size: 14px;
+}
+
 .col-lg-4,
 .col-lg-6,
 .col-lg-8,

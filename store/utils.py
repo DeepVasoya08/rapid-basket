@@ -48,7 +48,7 @@ def cartCookie(request):
 
 def cartData(request):
     if request.user.is_authenticated:
-        customer = request.user.customer
+        customer = request.user
         order, created = Order.objects.get_or_create(customer=customer, complete=False)
         items = order.orderitem_set.all()
         cartItems = order.get_cart_items
@@ -83,3 +83,8 @@ def guestCheckout(request, data):
             product=product, order=order, quantity=item["quantity"]
         )
     return customer, order
+
+
+def whishlistData(request):
+    wishlist_items = WishList.objects.filter(customer=request.user)
+    return wishlist_items

@@ -38,7 +38,7 @@ const addCookieItem = (productId, action) => {
 };
 
 const updateUserOrder = (productId, action) => {
-    let url = "/update_item/";
+    const url = "/update_item/";
 
     fetch(url, {
         method: "POST",

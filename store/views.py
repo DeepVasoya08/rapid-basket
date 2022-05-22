@@ -1,19 +1,12 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
-from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 import json
 import datetime
 
 from .models import *
-from .utils import cartCookie, cartData, guestCheckout
-from .form import CreateUserForm
-
-
-user = ""
-email = ""
+from .utils import cartCookie, cartData, guestCheckout, whishlistData
 
 
 def store(request):
@@ -61,6 +54,7 @@ def productDetails(request, cat_slug, pro_slug):
     return render(request, "store/product_details.html", context)
 
 
+@login_required(login_url="login")
 def cart(request):
     data = cartData(request)
     cartItems = data["cartItems"]
@@ -76,6 +70,17 @@ def cart(request):
     return render(request, "store/cart.html", context)
 
 
+@login_required(login_url="login")
+def wishlist(request):
+    data = cartData(request)
+    cartItems = data["cartItems"]
+    wishlist_data = whishlistData(request)
+    context = {"cartItems": cartItems, "wishlist": wishlist_data}
+
+    return render(request, "store/wishlist.html", context)
+
+
+@login_required(login_url="login")
 def checkout(request):
     data = cartData(request)
     cartItems = data["cartItems"]
@@ -91,6 +96,7 @@ def checkout(request):
     return render(request, "store/checkout.html", context)
 
 
+@login_required(login_url="login")
 def updateItem(request):
     data = json.loads(request.body)
     productId = data["productId"]
@@ -98,7 +104,7 @@ def updateItem(request):
     # print("action: ", action)
     # print("productId", productId)
 
-    customer = request.user.customer
+    customer = request.user
 
     product = Product.objects.get(id=productId)
 
@@ -119,6 +125,34 @@ def updateItem(request):
     return JsonResponse("Item Added", safe=False)
 
 
+@login_required(login_url="login")
+def updateWishlist(request):
+    data = json.loads(request.body)
+    productId = data["productId"]
+    action = data["action"]
+
+    customer = request.user
+
+    product = Product.objects.get(id=productId)
+
+    if product:
+        if action=="add":
+            if WishList.objects.filter(customer=customer, product=product):
+                pass
+            else:
+                order = WishList.objects.create(
+                        customer=customer, product=product
+                    )
+                order.quantity +=1
+                order.save()
+        elif action=="remove":
+            WishList.objects.filter(customer=customer,product=product).delete()
+                
+
+    return JsonResponse("wishlist updated", safe=False)
+
+
+@login_required(login_url="login")
 def processOrder(request):
     transaction_id = datetime.datetime.now().timestamp()
     data = json.loads(request.body)
@@ -149,58 +183,3 @@ def processOrder(request):
         )
 
     return JsonResponse("Payment complete", safe=False)
-
-
-def signUp(request):
-    global user, email
-    form = CreateUserForm()
-
-    if request.method == "POST":
-        form = CreateUserForm(request.POST)
-        if form.is_valid():
-            form.save()
-
-            user = form.cleaned_data.get("username")
-            email = form.cleaned_data.get("email")
-            superuser = User.objects.filter(username=user)
-            # customer, created = Customer.objects.get_or_create(
-            #     user=User, name=user, email=email
-            # )
-            # customer.save()
-
-            messages.success(request, "Account created")
-            return redirect("signin")
-
-    context = {"form": form}
-
-    return render(request, "store/signup.html", context)
-
-
-def signIn(request):
-    global user, email
-
-    if request.method == "POST":
-        username = request.POST["username"]
-        password = request.POST["password"]
-
-        # user = form.cleaned_data.get("username")
-        # email = form.cleaned_data.get("email")
-
-        auth_user = authenticate(username=username, password=password)
-
-        if auth_user is not None:
-            login(request, auth_user)
-            customer, created = Customer.objects.get_or_create(
-                user=request.user, name=user, email=email
-            )
-            customer.save()
-            return redirect("store")
-        else:
-            messages.error(request, "invalid username/password")
-            return redirect("store")
-
-    return render(request, "store/signin.html")
-
-
-def signOut(request):
-    pass
