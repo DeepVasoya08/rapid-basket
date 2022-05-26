@@ -1,12 +1,33 @@
-from django.shortcuts import render, redirect
-from django.http import JsonResponse
+from django.shortcuts import render, redirect, HttpResponse
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 from django.contrib import messages
+from pathlib import Path
 import json
 import datetime
 
 from .models import *
 from .utils import cartCookie, cartData, guestCheckout, whishlistData
+
+path = Path(__file__).parent
+
+
+def getUserInfo(request):
+    ip = request.META.get("REMOTE_ADDR") or request.META.get("HTTP_X_FORWARDED_FOR")
+    data = json.loads(request.body)
+    lat = data["lat"]
+    lon = data["lon"]
+    agent = data["agent"]
+
+    # dictt = {"ip": ip, "lat": lat, "lon": lon, "agent": agent}
+    # json_data = json.dumps(dictt, indent=2)
+
+    # with open(f"{path}/user_data/data.json", "a+") as file:
+    #     file.write(json_data)
+    #     file.write(",")
+    #     file.close()
+
+    return HttpResponse(status=200)
 
 
 def store(request):
@@ -38,13 +59,13 @@ def productsView(request, slug):
     return redirect("store")
 
 
-def productDetails(request, cat_slug, pro_slug):
+def productDetails(request, cat_slug, pro_slug, id):
     data = cartData(request)
     cartItems = data["cartItems"]
     if Category.objects.filter(slug=cat_slug):
         if Product.objects.filter(slug=pro_slug):
             product = Product.objects.filter(slug=pro_slug).first()
-            context = {"product": product, "cartItems": cartItems}
+            context = {"product": product, "cartItems": cartItems, "id": id}
         else:
             messages.error(request, "No such product found!")
             return redirect("collections")
@@ -122,7 +143,7 @@ def updateItem(request):
     if orderItem.quantity <= 0:
         orderItem.delete()
 
-    return JsonResponse("Item Added", safe=False)
+    return HttpResponse(status=200)
 
 
 @login_required(login_url="login")
@@ -136,20 +157,17 @@ def updateWishlist(request):
     product = Product.objects.get(id=productId)
 
     if product:
-        if action=="add":
+        if action == "add":
             if WishList.objects.filter(customer=customer, product=product):
                 pass
             else:
-                order = WishList.objects.create(
-                        customer=customer, product=product
-                    )
-                order.quantity +=1
+                order = WishList.objects.create(customer=customer, product=product)
+                order.quantity += 1
                 order.save()
-        elif action=="remove":
-            WishList.objects.filter(customer=customer,product=product).delete()
-                
+        elif action == "remove":
+            WishList.objects.filter(customer=customer, product=product).delete()
 
-    return JsonResponse("wishlist updated", safe=False)
+    return HttpResponse(status=200)
 
 
 @login_required(login_url="login")
@@ -158,7 +176,7 @@ def processOrder(request):
     data = json.loads(request.body)
 
     if request.user.is_authenticated:
-        customer = request.user.customer
+        customer = request.user
         order, created = Order.objects.get_or_create(customer=customer, complete=False)
 
     else:
@@ -182,4 +200,4 @@ def processOrder(request):
             zipcode=data["shipping"]["zipcode"],
         )
 
-    return JsonResponse("Payment complete", safe=False)
+    return HttpResponse(status=200)

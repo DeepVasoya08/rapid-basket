@@ -42,9 +42,17 @@
 
       {% for item in items %}
       <div class="cart-row">
-        <div style="flex: 2">
-          <img class="row-image" src="{{item.product.imageURL}}" />
-        </div>
+        <a
+          href="{% url 'product_details' item.product.categories.slug item.product.slug item.product.id %}"
+        >
+          <div
+            class="cart_details"
+            id="{{item.product.id}}"
+            style="flex: 2; cursor: pointer"
+          >
+            <img class="row-image" src="{{item.product.imageURL}}" />
+          </div>
+        </a>
         <div style="flex: 2">
           <p>{{item.product.title}}</p>
         </div>
@@ -76,5 +84,6 @@
       {% endfor %}
     </div>
   </div>
-  {% endblock content %}
 </div>
+
+{% endblock content %}

@@ -5,7 +5,7 @@ from .auth import auth
 urlpatterns = [
     path("", views.store, name="store"),
     path("category/<str:slug>", views.productsView, name="products"),
-    path("category/<str:cat_slug>/<str:pro_slug>", views.productDetails, name="product_details"),
+    path("category/<str:cat_slug>/<str:pro_slug>/<int:id>", views.productDetails, name="product_details"),
     path("wishlist/", views.wishlist, name="wishlist"),
     path("update_wishlist/", views.updateWishlist, name="update_wishlist"),
     path("cart/", views.cart, name="cart"),
@@ -15,4 +15,5 @@ urlpatterns = [
     path("login/", auth.login_user, name="login"),
     path("register/", auth.register, name="register"),
     path("logout/", auth.signOut, name="logout"),
+    path("get_user_into/",views.getUserInfo,name="user_info")
 ]

@@ -8,7 +8,7 @@
     >
     <a
       class="text-white"
-      href="{% url 'product_details' product.categories.slug product.slug %}"
+      href="{% url 'product_details' product.categories.slug product.slug product.id %}"
       >{{product.title}} /</a
     >
   </div>
