@@ -19,5 +19,3 @@ const showPosition = async (position) => {
         body: JSON.stringify({ lat, lon, agent })
     }).then((res) => res.json());
 }
-
-getLocation()

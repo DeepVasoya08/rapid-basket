@@ -30,7 +30,7 @@
         </div>
         <div style="flex: 1">
           <a
-            href="{% url 'product_details' item.product.categories.slug item.product.slug %}"
+            href="{% url 'product_details' item.product.categories.slug item.product.slug item.product.id %}"
             ><button class="btn btn-primary">View</button></a
           >
         </div>

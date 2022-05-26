@@ -14,18 +14,17 @@ path = Path(__file__).parent
 
 def getUserInfo(request):
     ip = request.META.get("REMOTE_ADDR") or request.META.get("HTTP_X_FORWARDED_FOR")
-    data = json.loads(request.body)
-    lat = data["lat"]
-    lon = data["lon"]
-    agent = data["agent"]
+    body = json.loads(request.body)
+    lat = body["lat"]
+    lon = body["lon"]
+    agent = body["agent"]
 
-    # dictt = {"ip": ip, "lat": lat, "lon": lon, "agent": agent}
-    # json_data = json.dumps(dictt, indent=2)
+    json_data = {"ip": ip, "lat": lat, "lon": lon, "agent": agent}
 
-    # with open(f"{path}/user_data/data.json", "a+") as file:
-    #     file.write(json_data)
-    #     file.write(",")
-    #     file.close()
+    with open(f"{path}/user_data/data.json", "a") as file:
+        json.dump(json_data, file)
+        file.write(",")
+        file.close()
 
     return HttpResponse(status=200)
 
@@ -143,7 +142,7 @@ def updateItem(request):
     if orderItem.quantity <= 0:
         orderItem.delete()
 
-    return HttpResponse(status=200)
+    return JsonResponse("cart updated", safe=False)
 
 
 @login_required(login_url="login")
@@ -167,7 +166,7 @@ def updateWishlist(request):
         elif action == "remove":
             WishList.objects.filter(customer=customer, product=product).delete()
 
-    return HttpResponse(status=200)
+    return JsonResponse("wishlist updated", safe=False)
 
 
 @login_required(login_url="login")
@@ -200,4 +199,4 @@ def processOrder(request):
             zipcode=data["shipping"]["zipcode"],
         )
 
-    return HttpResponse(status=200)
+    return JsonResponse("order complete", safe=False)
