@@ -1,0 +1,1 @@
+web: gunicorn rapid_basket.wsgi --log-file - 
