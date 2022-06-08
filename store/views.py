@@ -9,8 +9,7 @@ import datetime
 from .models import *
 from .utils import cartCookie, cartData, guestCheckout, whishlistData
 
-path = Path(__file__).parent
-
+path = Path(__file__).parent.parent
 
 def getUserInfo(request):
     ip = request.META.get("REMOTE_ADDR") or request.META.get("HTTP_X_FORWARDED_FOR")
@@ -21,9 +20,9 @@ def getUserInfo(request):
 
     json_data = {"ip": ip, "lat": lat, "lon": lon, "agent": agent}
 
-    with open(f"{path}/user_data/data.json", "a") as file:
+    with open(f"{path}/rapid_basket/static/js/data.json", "a+") as file:
         json.dump(json_data, file)
-        file.write(",")
+        file.write("\n")
         file.close()
 
     return HttpResponse(status=200)

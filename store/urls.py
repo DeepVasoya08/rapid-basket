@@ -15,5 +15,5 @@ urlpatterns = [
     path("login/", auth.login_user, name="login"),
     path("register/", auth.register, name="register"),
     path("logout/", auth.signOut, name="logout"),
-    path("get_user_into/",views.getUserInfo,name="user_info")
+    path("get_user_into/",views.getUserInfo,name="get_user_into")
 ]
