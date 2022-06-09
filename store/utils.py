@@ -1,5 +1,6 @@
 import json
 from .models import *
+from django.contrib.auth.models import User
 
 
 def cartCookie(request):
@@ -48,7 +49,8 @@ def cartCookie(request):
 
 def cartData(request):
     if request.user.is_authenticated:
-        customer = reqpytall()
+        order, created = Order.objects.get_or_create(customer=request.user,complete=False)
+        items = order.orderitem_set.all()
         cartItems = order.get_cart_items
     else:
         cookieData = cartCookie(request)

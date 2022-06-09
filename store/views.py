@@ -73,7 +73,7 @@ def productDetails(request, cat_slug, pro_slug, id):
     return render(request, "store/product_details.html", context)
 
 
-@login_required(login_url="login")
+@login_required(login_url="login_user")
 def cart(request):
     data = cartData(request)
     cartItems = data["cartItems"]
@@ -89,7 +89,7 @@ def cart(request):
     return render(request, "store/cart.html", context)
 
 
-@login_required(login_url="login")
+@login_required(login_url="login_user")
 def wishlist(request):
     data = cartData(request)
     cartItems = data["cartItems"]
@@ -99,7 +99,7 @@ def wishlist(request):
     return render(request, "store/wishlist.html", context)
 
 
-@login_required(login_url="login")
+@login_required(login_url="login_user")
 def checkout(request):
     data = cartData(request)
     cartItems = data["cartItems"]
@@ -115,7 +115,7 @@ def checkout(request):
     return render(request, "store/checkout.html", context)
 
 
-@login_required(login_url="login")
+@login_required(login_url="login_user")
 def updateItem(request):
     data = json.loads(request.body)
     productId = data["productId"]
@@ -144,7 +144,7 @@ def updateItem(request):
     return JsonResponse("cart updated", safe=False)
 
 
-@login_required(login_url="login")
+@login_required(login_url="login_user")
 def updateWishlist(request):
     data = json.loads(request.body)
     productId = data["productId"]
@@ -168,7 +168,7 @@ def updateWishlist(request):
     return JsonResponse("wishlist updated", safe=False)
 
 
-@login_required(login_url="login")
+@login_required(login_url="login_user")
 def processOrder(request):
     transaction_id = datetime.datetime.now().timestamp()
     data = json.loads(request.body)

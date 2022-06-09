@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-lbm77qad5h4340g#sd4j!)pi8(rk0u0auwh9(3+2bvf*kpyrd_"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [
     "127.0.0.1",
@@ -132,7 +132,7 @@ STATIC_URL = "static/"
 
 # STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 
-MEDIA_URL = "/static/images/"
+MEDIA_URL = "/images/"
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "rapid_basket/static/images")
 
