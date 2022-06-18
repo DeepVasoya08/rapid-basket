@@ -136,6 +136,7 @@
     image: "https://example.com/your_logo",
     //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
     handler: function (response) {
+      console.log(response.razorpay_payment_id);
       submitData();
     },
     prefill: {
@@ -182,7 +183,6 @@
   });
 
   function submitData() {
-    console.log("btn clicked");
 
     let userFormData = {
       name: null,
@@ -223,7 +223,7 @@
         alert("payment done");
         cart = {};
         document.cookie = "cart=" + JSON.stringify(cart) + ";domain;path=/";
-        window.location.href = "{% url 'store' %}";
+        {% comment %} window.location.href = "{% url 'store' %}"; {% endcomment %}
       });
   }
 </script>

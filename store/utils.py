@@ -49,7 +49,9 @@ def cartCookie(request):
 
 def cartData(request):
     if request.user.is_authenticated:
-        order, created = Order.objects.get_or_create(customer=request.user,complete=False)
+        order, created = Order.objects.get_or_create(
+            customer=request.user, complete=False
+        )
         items = order.orderitem_set.all()
         cartItems = order.get_cart_items
     else:
@@ -58,7 +60,11 @@ def cartData(request):
         order = cookieData["order"]
         items = cookieData["items"]
 
-    return {"cartItems": cartItems, "order": order, "items": items}
+    return {
+        "cartItems": cartItems,
+        "order": order,
+        "items": items,
+    }
 
 
 def guestCheckout(request, data):

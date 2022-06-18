@@ -34,7 +34,7 @@ def login_user(request):
 
         # context = {"categories": categories, "cartItems": cartItems}
         # return render(request, "store/store.html", context)
-        return redirect('store')
+        return redirect("store")
 
     if request.method == "POST":
         username = request.POST["username"]
@@ -60,3 +60,4 @@ def signOut(request):
         logout(request)
         messages.success(request, "logged out!")
     return redirect("store")
+

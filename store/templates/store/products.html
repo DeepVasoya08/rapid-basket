@@ -1,6 +1,6 @@
 {% extends 'store/main.html' %} {% load static %} {% block content %}
 
-<div style="background-color: #4f868c !important;" class="py-3 bg-primary">
+<div style="background-color: #4f868c !important" class="py-3 bg-primary">
   <div class="container">
     <a class="text-white" href="{% url 'store' %}">Collections /</a>
     <a class="text-white" href="{% url 'products' categories.slug %}"
@@ -17,7 +17,10 @@
       {% for item in products %}
       <div class="col-md-3">
         <div class="card">
-          <a style="text-decoration: none;" href="{% url 'product_details' item.categories.slug item.slug item.id %}">
+          <a
+            style="text-decoration: none"
+            href="{% url 'product_details' item.categories.slug item.slug item.id %}"
+          >
             <div class="card-body">
               <div class="category-image">
                 <img
@@ -27,11 +30,25 @@
                 />
               </div>
               <h4 class="text-center">{{item.title}}</h4>
-              <hr>
+              <hr />
               <h6 class="font-weight-bold">{{item.small_desc}}</h6>
-              <span style="color: black;" class="text-center"
-                >&#8377; {{item.price}}</span
-              >
+              <div style="display: flex; align-content: center; align-items: center; justify-content: space-between">
+                <span style="color: black" class="text-center"
+                  >&#8377; {{item.price}}</span
+                >
+                <button
+                  style="border-radius: 5px; background-color: #299e11"
+                  data-toggle="tooltip"
+                  data-placement="bottom"
+                  title="Add to cart"
+                  data-product="{{product.id}}"
+                  data-action="add"
+                  type="button"
+                  class="btn btn-primary me-3 float-start update-cart"
+                >
+                  Add <i class="fa fa-shopping-cart"></i>
+                </button>
+              </div>
             </div>
           </a>
         </div>

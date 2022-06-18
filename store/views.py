@@ -11,6 +11,7 @@ from .utils import cartCookie, cartData, guestCheckout, whishlistData
 
 path = Path(__file__).parent.parent
 
+
 def getUserInfo(request):
     ip = request.META.get("REMOTE_ADDR") or request.META.get("HTTP_X_FORWARDED_FOR")
     body = json.loads(request.body)
@@ -59,11 +60,23 @@ def productsView(request, slug):
 
 def productDetails(request, cat_slug, pro_slug, id):
     data = cartData(request)
+    in_wishlist = False
     cartItems = data["cartItems"]
     if Category.objects.filter(slug=cat_slug):
         if Product.objects.filter(slug=pro_slug):
             product = Product.objects.filter(slug=pro_slug).first()
-            context = {"product": product, "cartItems": cartItems, "id": id}
+            wishlist = WishList.objects.filter(
+                product=product, customer=request.user
+            ).first()
+            wishlist = int(str(wishlist)) if wishlist != None else None
+            if wishlist == id:
+                in_wishlist = True
+            context = {
+                "product": product,
+                "cartItems": cartItems,
+                "id": id,
+                "in_wishlist": in_wishlist,
+            }
         else:
             messages.error(request, "No such product found!")
             return redirect("collections")

@@ -114,9 +114,14 @@
 
         <div class="form-inline my-2 my-lg-0">
           {% if request.user.is_authenticated %}
-          <a href="{% url 'logout' %}" class="btn btn-warning">Logout</a>
+          <a href="{% url 'logout' %}" style="border-radius: 5px" class="btn btn-warning">Logout</a>
           {% else %}
-          <a href="{% url 'login_user' %}" class="btn btn-warning">Login</a>
+          <a
+            href="{% url 'login_user' %}"
+            style="border-radius: 5px"
+            class="btn btn-warning"
+            >Login</a
+          >
           {% endif %}
 
           <a
@@ -134,7 +139,10 @@
             title="Wishlist"
             href="{% url 'wishlist' %}"
           >
-            <img id="cart-icon" src="{% static 'images/wishlist.png' %}" />
+            <i
+              class="fa fa-solid fa-heart fa-lg"
+              style="color: white; margin-left: 10px"
+            ></i>
           </a>
         </div>
       </div>
@@ -165,6 +173,8 @@
 
     <script type="text/javascript" src="{% static 'js/cart.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/wishlist.js' %}"></script>
+    {% comment %}
     <script type="text/javascript" src="{% static 'js/geo.js' %}"></script>
+    {% endcomment %}
   </body>
 </html>

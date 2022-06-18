@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 
 class Category(models.Model):
     title = models.CharField(max_length=50)
-    slug = models.CharField(blank=True, null=True,max_length=150)
+    slug = models.CharField(blank=True, null=True, max_length=150)
     image = models.ImageField(null=True, blank=True)
 
     def __str__(self):
@@ -25,13 +25,16 @@ class Category(models.Model):
 
 class Product(models.Model):
     title = models.CharField(max_length=200)
-    small_desc = models.CharField(max_length=100,null=False,)
+    small_desc = models.CharField(
+        max_length=100,
+        null=False,
+    )
     desc = models.CharField(max_length=300)
     price = models.FloatField()
     digital = models.BooleanField(default=False, null=True, blank=True)
     pro_image = models.ImageField(null=True, blank=True)
     categories = models.ForeignKey(Category, blank=True, on_delete=models.CASCADE)
-    slug = models.CharField(blank=True, null=True,max_length=150)
+    slug = models.CharField(blank=True, null=True, max_length=150)
 
     def __str__(self):
         return self.title
@@ -43,6 +46,17 @@ class Product(models.Model):
         except:
             url = ""
         return url
+
+    @property
+    def get_wishlist_total(self):
+        wishlist = self.wishlist_set.all().first()
+        wishlist = str(wishlist) if wishlist != None else None
+        if wishlist != None:
+            total = sum([int(item) for item in wishlist])
+        else:
+            total = 0
+        print("total: ",total)
+        return total
 
 
 class Order(models.Model):
@@ -107,8 +121,4 @@ class WishList(models.Model):
     quantity = models.IntegerField(default=0, null=True, blank=True)
 
     def __str__(self):
-        return str(self.id)
-
-    @property
-    def wishlist_total(self):
-        return self.quantity
+        return str(self.product.id)
