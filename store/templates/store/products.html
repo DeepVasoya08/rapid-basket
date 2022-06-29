@@ -32,25 +32,29 @@
               <h4 class="text-center">{{item.title}}</h4>
               <hr />
               <h6 class="font-weight-bold">{{item.small_desc}}</h6>
-              <div style="display: flex; align-content: center; align-items: center; justify-content: space-between">
+              <div
+                style="
+                  display: flex;
+                  align-content: center;
+                  align-items: center;
+                  justify-content: space-between;
+                "
+              >
                 <span style="color: black" class="text-center"
                   >&#8377; {{item.price}}</span
                 >
-                <button
-                  style="border-radius: 5px; background-color: #299e11"
-                  data-toggle="tooltip"
-                  data-placement="bottom"
-                  title="Add to cart"
-                  data-product="{{product.id}}"
-                  data-action="add"
-                  type="button"
-                  class="btn btn-primary me-3 float-start update-cart"
-                >
-                  Add <i class="fa fa-shopping-cart"></i>
-                </button>
               </div>
             </div>
           </a>
+          <button
+            style="border-radius: 5px; background-color: #299e11"
+            data-product="{{item.id}}"
+            data-action="add"
+            type="button"
+            class="btn btn-primary me-3 float-start update-cart"
+          >
+            Add <i class="fa fa-shopping-cart"></i>
+          </button>
         </div>
       </div>
       {% endfor %}

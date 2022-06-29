@@ -14,10 +14,7 @@ SECRET_KEY = "django-insecure-lbm77qad5h4340g#sd4j!)pi8(rk0u0auwh9(3+2bvf*kpyrd_
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [
-    "127.0.0.1",
-    "rapidbasket.herokuapp.com"
-]
+ALLOWED_HOSTS = ["127.0.0.1", "rapidbasket.herokuapp.com"]
 
 
 # Application definition
@@ -122,7 +119,8 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 
 MEDIA_URL = "/images/"
 
-MEDIA_ROOT = os.path.join(BASE_DIR, "rapid_basket/static/images")
+MEDIA_ROOT = os.path.join("static/images")
+# MEDIA_ROOT = os.path.join(BASE_DIR, "rapid_basket/static/images")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field

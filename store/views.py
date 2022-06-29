@@ -107,6 +107,7 @@ def wishlist(request):
     data = cartData(request)
     cartItems = data["cartItems"]
     wishlist_data = whishlistData(request)
+    print(wishlist_data.first())
     context = {"cartItems": cartItems, "wishlist": wishlist_data}
 
     return render(request, "store/wishlist.html", context)
